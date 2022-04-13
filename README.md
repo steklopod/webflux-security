@@ -39,8 +39,8 @@ but this project runs in a OpenJDK 15 JVM. This is because Kotlin does not suppo
 
 The project consists in two maven modules:
 
-* `backend-server` (Spring app)
-* `frontend-client` (Vue.js app)
+* `backend` (Spring app)
+* `frontend` (Vue.js app)
 
 And in two more folders:
 
@@ -377,19 +377,19 @@ If the converter returns an empty Mono, continue the chain otherwise go to step 
 This is the general algorithm that AuthenticationWebFilter follows, and in which we can customize all steps or keep the default ones that are handy for us. 
 In our case, the steps that we are gonna replace are:
 
-1. We want to authenticate users through a POST to `/login` endpoint, our matcher looks at the request and see if this pattern match. We can use the factory method `pathMatchers()` that [ServerWebExchangeMatchers](/backend-server/src/main/kotlin/com/popokis/backend_server/application/WebConfig.kt#L71) provides 
+1. We want to authenticate users through a POST to `/login` endpoint, our matcher looks at the request and see if this pattern match. We can use the factory method `pathMatchers()` that [ServerWebExchangeMatchers](/backend/src/main/kotlin/com/popokis/backend_server/application/WebConfig.kt#L71) provides 
 to create our custom matcher. 
-2. Our converter gets from the body a JSON with `username` and `password` attributes and creates an unauthenticated Authentication object with them. Done by [JWTConverter](/backend-server/src/main/kotlin/com/popokis/backend_server/application/security/authentication/JWTConverter.kt). 
+2. Our converter gets from the body a JSON with `username` and `password` attributes and creates an unauthenticated Authentication object with them. Done by [JWTConverter](/backend/src/main/kotlin/com/popokis/backend_server/application/security/authentication/JWTConverter.kt). 
 3. [AbstractUserDetailsReactiveAuthenticationManager](https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/authentication/AbstractUserDetailsReactiveAuthenticationManager.java#L98) gets the principal (username) and the credentials (password) from the Authentication object created in step 2 and: 
-    1. [AbstractUserDetailsReactiveAuthenticationManager](https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/authentication/AbstractUserDetailsReactiveAuthenticationManager.java#L100) looks into the database if the user exist with [CustomerReactiveUserDetailsService](/backend-server/src/main/kotlin/com/popokis/backend_server/application/security/authentication/CustomerReactiveUserDetailsService.kt), if exists go to step 3.ii, otherwise throw BadCredentialsException and executes ServerAuthenticationFailureHandler (step 5). 
+    1. [AbstractUserDetailsReactiveAuthenticationManager](https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/authentication/AbstractUserDetailsReactiveAuthenticationManager.java#L100) looks into the database if the user exist with [CustomerReactiveUserDetailsService](/backend/src/main/kotlin/com/popokis/backend_server/application/security/authentication/CustomerReactiveUserDetailsService.kt), if exists go to step 3.ii, otherwise throw BadCredentialsException and executes ServerAuthenticationFailureHandler (step 5). 
     2. [AbstractUserDetailsReactiveAuthenticationManager](https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/authentication/AbstractUserDetailsReactiveAuthenticationManager.java#L103) checks if passwords match, if so authentication success, if not throw BadCredentialsException and executes ServerAuthenticationFailureHandler (step 5).
 4. On authentication success:
     1. Our project is just an HTTP API and by default should be stateless, then we don't want to create a session so skip it. Done by [NoOpServerSecurityContextRepository](https://github.com/spring-projects/spring-security/blob/master/web/src/main/java/org/springframework/security/web/server/context/NoOpServerSecurityContextRepository.java).
-    2. Execute our [JWTServerAuthenticationSuccessHandler](/backend-server/src/main/kotlin/com/popokis/backend_server/application/security/authentication/JWTServerAuthenticationSuccessHandler.kt) that generates an access and a refresh token and put them in the header of the response.
+    2. Execute our [JWTServerAuthenticationSuccessHandler](/backend/src/main/kotlin/com/popokis/backend_server/application/security/authentication/JWTServerAuthenticationSuccessHandler.kt) that generates an access and a refresh token and put them in the header of the response.
 5. On authentication error:
-    1. Return unauthorized error. Done by [JWTServerAuthenticationFailureHandler](/backend-server/src/main/kotlin/com/popokis/backend_server/application/JWTServerAuthenticationFailureHandler.kt).
+    1. Return unauthorized error. Done by [JWTServerAuthenticationFailureHandler](/backend/src/main/kotlin/com/popokis/backend_server/application/JWTServerAuthenticationFailureHandler.kt).
 
-We are following these steps customizing [AuthenticationWebFilter](/backend-server/src/main/kotlin/com/popokis/backend_server/application/WebConfig.kt#L70), and our ServerHttpSecurity configuration looks like:
+We are following these steps customizing [AuthenticationWebFilter](/backend/src/main/kotlin/com/popokis/backend_server/application/WebConfig.kt#L70), and our ServerHttpSecurity configuration looks like:
 
 ```kotlin
 @Bean
@@ -430,7 +430,7 @@ At this point we have been customized our authentication flow, how should we aut
 
 Spring Security could be used to give permissions to our clients for use certain endpoints of our API, these permissions could be role based, scope based or both and are called [GrantedAuthority](https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/core/GrantedAuthority.java). 
 We give permissions in the authentication process, in the ServerAuthenticationSuccessHandler when we generate the tokens 
-we have to add the roles in form of claims in the JWT (see [JWTServerAuthenticationSuccessHandler](/backend-server/src/main/kotlin/com/popokis/backend_server/application/security/authentication/JWTServerAuthenticationSuccessHandler.kt)).
+we have to add the roles in form of claims in the JWT (see [JWTServerAuthenticationSuccessHandler](/backend/src/main/kotlin/com/popokis/backend_server/application/security/authentication/JWTServerAuthenticationSuccessHandler.kt)).
 
 In our application, we have three types of endpoints where we want to restrict access: 
 
@@ -463,7 +463,7 @@ fun configureSecurity(http: ServerHttpSecurity,
     }
 ```
 
-With this configuration (see [WebConfig](https://github.com/soasada/kotlin-coroutines-webflux-security/blob/master/backend-server/src/main/kotlin/com/popokis/backend_server/application/WebConfig.kt)) we are adding an [AuthorizationWebFilter](https://github.com/spring-projects/spring-security/blob/master/web/src/main/java/org/springframework/security/web/server/authorization/AuthorizationWebFilter.java) 
+With this configuration (see [WebConfig](https://github.com/soasada/kotlin-coroutines-webflux-security/blob/master/backend/src/main/kotlin/com/popokis/backend_server/application/WebConfig.kt)) we are adding an [AuthorizationWebFilter](https://github.com/spring-projects/spring-security/blob/master/web/src/main/java/org/springframework/security/web/server/authorization/AuthorizationWebFilter.java) 
 to our chain, the important thing here is that Spring Security creates it (see [ServerHttpSecurity](https://github.com/spring-projects/spring-security/blob/master/config/src/main/java/org/springframework/security/config/web/server/ServerHttpSecurity.java#L2587)) with a [DelegatingReactiveAuthorizationManager](https://github.com/spring-projects/spring-security/blob/master/web/src/main/java/org/springframework/security/web/server/authorization/DelegatingReactiveAuthorizationManager.java) that holds a 
 ReactiveAuthorizationManager (the one who determines if the client has access or not) for each path matcher we configured: one for the excluded paths, one for admin path and another for the rest. 
 Each ReactiveAuthorizationManager is called when an endpoint match, so the `permitAll()` method is a ReactiveAuthorizationManager that always allow access, and the 
@@ -532,11 +532,11 @@ These checks are provided by our JWT library.
 
 1. Build frontend
 
-`mvn -U clean install -pl :frontend-client`
+`mvn -U clean install -pl :frontend`
 
 2. Build backend
 
-`mvn -U clean test package -pl :backend-server`
+`mvn -U clean test package -pl :backend`
 
 ## MongoDB Index creation
 
@@ -546,8 +546,8 @@ Index creation must be *explicitly* enabled, since Spring Data MongoDB version 3
 
 :warning: Before running the hot reloading frontend you have to build the frontend:
 
-`mvn -U clean install -pl :frontend-client`
+`mvn -U clean install -pl :frontend`
 
 Then:
 
-`bash frontend-client/npm --prefix frontend-client run serve`
+`bash frontend/npm --prefix frontend run serve`

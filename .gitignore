@@ -58,5 +58,5 @@ node/
 dist/
 *.log
 
-frontend-client/package-lock.json
-backend-server/src/main/resources/public
+frontend/package-lock.json
+backend/src/main/resources/public

@@ -16,9 +16,3 @@ spring:
       username: admin
       password: password
       authentication-database: admin
-
-mongeez:
-  username: admin
-  password: 'password'
-  database: proddb
-  authentication-database: admin

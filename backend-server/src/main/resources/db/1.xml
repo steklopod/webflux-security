@@ -1,8 +1,0 @@
-<mongoChangeLog>
-    <changeSet changeId="ChangeSet-1" author="steklopod">
-        <script>
-            db.createUser({ user: "admin", pwd: "password", roles: [ { role: "readWrite", db: "proddb" } ] });
-
-        </script>
-    </changeSet>
-</mongoChangeLog>

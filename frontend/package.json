@@ -1,5 +1,5 @@
 {
-  "name": "frontend-client",
+  "name": "frontend",
   "scripts": {
     "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
     "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
