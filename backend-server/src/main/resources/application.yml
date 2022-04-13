@@ -10,5 +10,15 @@ spring:
   output.ansi.enabled: ALWAYS
   data:
     mongodb:
-      uri: mongodb://admin:password@localhost:27017/proddb
+#      uri: mongodb://admin:password@localhost:27017/proddb?authSource=admin
       database: proddb
+      host: localhost
+      username: admin
+      password: password
+      authentication-database: admin
+
+mongeez:
+  username: admin
+  password: 'password'
+  database: proddb
+  authentication-database: admin

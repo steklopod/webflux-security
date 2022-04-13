@@ -10,7 +10,8 @@ import java.time.Instant
 
 @Document
 data class Customer(
-    @Id val id: String,
+    @Id
+    val id: String,
     @Indexed(unique = true)
     val email: String,
     val password: String,

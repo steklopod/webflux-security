@@ -22,11 +22,11 @@ internal class LoginTest : AppTest() {
                 .exchange()
                 .expectStatus().isOk
                 .expectHeader().exists("Authorization")
-                .expectHeader().exists("JWT-Refresh-Token")
+                .expectHeader().exists("Refresh-Token")
                 .expectBody().returnResult().responseHeaders
 
         val accessToken = responseHeaders["Authorization"]?.get(0)
-        val refreshToken = responseHeaders["JWT-Refresh-Token"]?.get(0)
+        val refreshToken = responseHeaders["Refresh-Token"]?.get(0)
 
         val decodedAccessToken = jwtService.decodeAccessToken(accessToken!!)
         jwtService.decodeRefreshToken(refreshToken!!)

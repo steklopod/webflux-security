@@ -14,6 +14,7 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-webflux")
 
     implementation("org.springframework.boot", "spring-boot-starter-data-mongodb-reactive")
+    implementation("io.github.hzpz.spring.boot:mongeez-spring-boot-starter:2.0.1")
 
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 
