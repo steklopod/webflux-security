@@ -1,4 +1,5 @@
 # Spring Webflux + Spring Security + Kotlin Coroutines
+## [![Minimal CI/CD](https://github.com/steklopod/webflux-security/actions/workflows/test.yml/badge.svg)](https://github.com/steklopod/webflux-security/actions/workflows/test.yml)
 
 Hi! If you are one of those people like me, that are trying to learn Spring Webflux with Kotlin and want to add Spring Security 
 to a project, this repository is for you. As you probably already know, the documentation about using Spring Security with Spring Webflux 

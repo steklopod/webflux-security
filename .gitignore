@@ -1,4 +1,6 @@
-# Created by .ignore support plugin (hsz.mobi)
+.build
+*/.build
+
 ### Java template
 *.class
 
@@ -52,7 +54,7 @@ project/project
 *.iml
 dependency-reduced-pom.xml
 node/
-node_modules/
+*node_modules/
 dist/
 *.log
 

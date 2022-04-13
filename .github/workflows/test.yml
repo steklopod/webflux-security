@@ -20,18 +20,25 @@ jobs:
           mongodb-password: password
           mongodb-db: proddb
 
-      - name: Set up Open JDK 17
-        uses: actions/setup-java@v1
+
+      - name: 🪜 Setup java 17
+        uses: actions/setup-java@v3
         with:
           java-version: 17
+          distribution: temurin
 
-      - name: Cache local Maven repository
+      - name: 💾 Cache gradle
         uses: actions/cache@v2
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
+            ${{ runner.os }}-gradle-
 
-      - name: Test backend
-        run: mvn -B clean test -pl :backend-server
+      - name: chmod +x ./gradlew
+        run:  chmod +x ./gradlew
+
+      - name: 🕋 TEST
+        run: ./gradlew test
