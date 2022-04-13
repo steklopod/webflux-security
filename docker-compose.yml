@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:4.2-bionic
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: proddb
+    ports:
+      - "27019:27017"
+    volumes:
+      - ./mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js
+      - ./mongo/002_create_customer_collection.js:/docker-entrypoint-initdb.d/002_create_customer_collection.js
