@@ -1,12 +1,7 @@
-server:
-  port: 8087
-  address: 127.0.0.1
-
 app:
-#  version: @project.version@
   secret: secret
   refresh: refresh
-  cors: http://localhost:8087
+  cors: http://localhost:8080
   first_user:
     username: "user@example.com"
     password: "userPassword"
@@ -16,3 +11,4 @@ spring:
   data:
     mongodb:
       uri: mongodb://admin:password@localhost:27017/proddb
+      database: proddb

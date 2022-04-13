@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/admin")
-class AdminCustomerController(private val customerService: CustomerService) {
+class CustomerAdminController(private val customerService: CustomerService) {
 
     @GetMapping("/customers")
     fun findAll() = customerService.all()

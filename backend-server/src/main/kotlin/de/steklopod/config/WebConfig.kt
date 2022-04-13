@@ -1,12 +1,12 @@
 package de.steklopod.config
 
 import de.steklopod.config.security.JWTService
-import de.steklopod.config.security.authentication.CustomerReactiveUserDetailsService
-import de.steklopod.config.security.authorization.JWTReactiveAuthorizationFilter
+import de.steklopod.service.UserService
+import de.steklopod.config.security.JWTReactiveAuthorizationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
-import org.springframework.http.HttpMethod
+import org.springframework.http.HttpMethod.POST
 import org.springframework.http.MediaType
 import org.springframework.http.codec.json.AbstractJackson2Decoder
 import org.springframework.http.codec.json.Jackson2JsonDecoder
@@ -40,9 +40,7 @@ class WebConfig : WebFluxConfigurer {
 
     @Bean
     fun configureSecurity(
-        http: ServerHttpSecurity,
-        jwtAuthenticationFilter: AuthenticationWebFilter,
-        jwtService: JWTService
+        http: ServerHttpSecurity, jwtAuthenticationFilter: AuthenticationWebFilter, jwtService: JWTService
     ): SecurityWebFilterChain {
         return http
             .csrf().disable()
@@ -77,9 +75,7 @@ class WebConfig : WebFluxConfigurer {
         jwtServerAuthenticationFailureHandler: ServerAuthenticationFailureHandler
     ): AuthenticationWebFilter = AuthenticationWebFilter(reactiveAuthenticationManager).apply {
         setRequiresAuthenticationMatcher {
-            ServerWebExchangeMatchers.pathMatchers(
-                HttpMethod.POST, "/login"
-            ).matches(it)
+            ServerWebExchangeMatchers.pathMatchers(POST, "/login").matches(it)
         }
         setServerAuthenticationConverter(jwtConverter)
         setAuthenticationSuccessHandler(serverAuthenticationSuccessHandler)
@@ -93,11 +89,10 @@ class WebConfig : WebFluxConfigurer {
 
     @Bean
     fun reactiveAuthenticationManager(
-        reactiveUserDetailsService: CustomerReactiveUserDetailsService,
+        reactiveUserDetailsService: UserService,
         passwordEncoder: PasswordEncoder
-    ): ReactiveAuthenticationManager {
-        val manager = UserDetailsRepositoryReactiveAuthenticationManager(reactiveUserDetailsService)
-        manager.setPasswordEncoder(passwordEncoder)
-        return manager
-    }
+    ): ReactiveAuthenticationManager =
+        UserDetailsRepositoryReactiveAuthenticationManager(reactiveUserDetailsService).apply {
+            setPasswordEncoder(passwordEncoder)
+        }
 }

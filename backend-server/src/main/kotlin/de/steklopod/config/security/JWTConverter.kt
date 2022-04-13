@@ -1,4 +1,4 @@
-package de.steklopod.config.security.authentication
+package de.steklopod.config.security
 
 import de.steklopod.config.HttpExceptionFactory.badRequest
 import de.steklopod.model.LoginRequest

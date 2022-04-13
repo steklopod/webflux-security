@@ -1,6 +1,5 @@
-package de.steklopod.config.security.authorization
+package de.steklopod.config.security
 
-import de.steklopod.config.security.JWTService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders

@@ -1,5 +1,6 @@
-package de.steklopod.config.security.authentication
+package de.steklopod.service
 
+import de.steklopod.model.Customer
 import de.steklopod.service.CustomerService
 import kotlinx.coroutines.reactor.mono
 import org.springframework.security.authentication.BadCredentialsException
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 @Service
-class CustomerReactiveUserDetailsService(private val customerService: CustomerService) : ReactiveUserDetailsService {
+class UserService(private val customerService: CustomerService) : ReactiveUserDetailsService {
 
     override fun findByUsername(username: String?): Mono<UserDetails> = mono {
-        val customer = customerService.findByEmail(username!!) ?: throw BadCredentialsException("Invalid Credentials")
-        return@mono User(customer.email, customer.password, listOf(customer))
+        val customer: Customer = customerService.findByEmail(username!!) ?: throw BadCredentialsException("Invalid Credentials")
+        User(customer.email, customer.password, listOf(customer))
     }
 }
