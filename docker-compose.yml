@@ -2,13 +2,17 @@ version: "3.8"
 services:
   mongo:
     image: mongo:4.2-bionic
+    container_name: mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: proddb
     ports:
-      - "27019:27017"
+      - 27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
+      start_period: 40s
+#      test: [ "CMD", "mongo", "--eval", "\"db.adminCommand('ping')\"" ]
     volumes:
-      - ./mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js
-      - ./mongo/002_create_customer_collection.js:/docker-entrypoint-initdb.d/002_create_customer_collection.js
+      - ./mongo/init:/docker-entrypoint-initdb.d

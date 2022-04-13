@@ -15,4 +15,4 @@ spring:
   output.ansi.enabled: ALWAYS
   data:
     mongodb:
-      uri: mongodb://admin:password@localhost:27019/proddb
+      uri: mongodb://admin:password@localhost:27017/proddb
