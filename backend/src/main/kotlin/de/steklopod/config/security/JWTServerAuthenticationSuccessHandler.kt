@@ -1,9 +1,8 @@
 package de.steklopod.config.security
 
-import de.steklopod.config.HttpExceptionFactory
 import de.steklopod.config.HttpExceptionFactory.unauthorized
 import kotlinx.coroutines.reactor.mono
-import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.server.WebFilterExchange
@@ -13,13 +12,17 @@ import reactor.core.publisher.Mono
 
 @Component
 class JWTServerAuthenticationSuccessHandler(private val jwtService: JWTService) : ServerAuthenticationSuccessHandler {
-    companion object{
+    companion object {
         private const val FIFTEEN_MIN = 1000 * 60 * 15
         private const val FOUR_HOURS = 1000 * 60 * 60 * 4
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 
 
-    override fun onAuthenticationSuccess(webFilterExchange: WebFilterExchange, authentication: Authentication): Mono<Void> = mono {
+    override fun onAuthenticationSuccess(
+        webFilterExchange: WebFilterExchange,
+        authentication: Authentication
+    ): Mono<Void> = mono {
         val principal = authentication.principal ?: throw unauthorized()
 
         when (principal) {
@@ -29,9 +32,9 @@ class JWTServerAuthenticationSuccessHandler(private val jwtService: JWTService) 
                 val accessToken = jwtService.accessToken(principal.username, FIFTEEN_MIN, roles)
                 val refreshToken = jwtService.refreshToken(principal.username, FOUR_HOURS, roles)
 
-                val exchange = webFilterExchange.exchange?: throw unauthorized()
+                val exchange = webFilterExchange.exchange ?: throw unauthorized()
 
-                with(exchange.response.headers){
+                with(exchange.response.headers) {
                     setBearerAuth(accessToken)
                     set("Refresh-Token", refreshToken)
                 }

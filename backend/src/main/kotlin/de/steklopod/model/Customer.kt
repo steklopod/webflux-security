@@ -1,5 +1,6 @@
 package de.steklopod.model
 
+import de.steklopod.model.Role.USER
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
@@ -12,23 +13,22 @@ import java.time.Instant
 data class Customer(
     @Id
     val id: String,
+
     @Indexed(unique = true)
     val email: String,
+
     val password: String,
-    val role: Role = Role.USER,
+
+    val role: Role = USER,
+
     @CreatedDate
     val createdAt: Instant = Instant.now(),
     @LastModifiedDate
     val updatedAt: Instant = Instant.now()
 ) : GrantedAuthority {
 
-    override fun equals(other: Any?) = other is Customer && EssentialCustomerData(this) == EssentialCustomerData(other)
-    override fun hashCode() = EssentialCustomerData(id).hashCode()
-
     override fun getAuthority(): String = "ROLE_$role"
 
-
-    private data class EssentialCustomerData(val id: String) {
-        constructor(customer: Customer) : this(customer.id)
-    }
+    override fun hashCode(): Int = id.hashCode()
+    override fun equals(other: Any?): Boolean = other is Customer && other.id == id
 }

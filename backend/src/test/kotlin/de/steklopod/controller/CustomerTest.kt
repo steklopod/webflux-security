@@ -3,7 +3,7 @@ package de.steklopod.controller
 import de.steklopod.AppTest
 import de.steklopod.model.Customer
 import de.steklopod.service.CustomerService
-import de.steklopod.CustomerHelper
+import de.steklopod.TestHelper
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,7 +41,7 @@ internal class CustomerTest(@Autowired private val customerService: CustomerServ
     @Test
     fun `Given a customer when tries to fetch data from customers API with AUTHORIZATION then receives the data`() {
         runBlocking {
-            val customer = CustomerHelper.random()
+            val customer = TestHelper.randomCustomer()
 
             customerService.save(customer)
 

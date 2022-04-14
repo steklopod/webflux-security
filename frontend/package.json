@@ -1,9 +1,8 @@
 {
   "name": "frontend",
   "scripts": {
-    "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
     "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
-    "test:unit": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service test:unit",
+    "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve"
   },
   "dependencies": {
     "bootstrap": "^4.5.0",
@@ -16,13 +15,8 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-router": "~4.4.0",
-    "@vue/cli-plugin-unit-jest": "~4.4.0",
     "@vue/cli-plugin-vuex": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
-    "@vue/test-utils": "^1.0.3",
     "vue-template-compiler": "^2.6.11"
-  },
-  "jest": {
-    "preset": "@vue/cli-plugin-unit-jest"
   }
 }

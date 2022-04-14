@@ -3,10 +3,11 @@ package de.steklopod.config.security
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
-import java.util.Date
+import java.util.*
 
 @Service
 class JWTService(@Value("\${app.secret}") val secret: String,
@@ -31,17 +32,19 @@ class JWTService(@Value("\${app.secret}") val secret: String,
     fun getRoles(decodedJWT: DecodedJWT) = decodedJWT.getClaim("role").asList(String::class.java)
             .map { SimpleGrantedAuthority(it) }
 
-    private fun generate(username: String, expirationInMillis: Int, roles: Array<String>, signature: String): String {
-        return JWT.create()
+    private fun generate(username: String, expirationInMillis: Int, roles: Array<String>, signature: String): String =
+        JWT.create()
                 .withSubject(username)
                 .withExpiresAt(Date(System.currentTimeMillis() + expirationInMillis))
                 .withArrayClaim("role", roles)
                 .sign(Algorithm.HMAC512(signature.toByteArray()))
-    }
 
-    private fun decode(signature: String, token: String): DecodedJWT {
-        return JWT.require(Algorithm.HMAC512(signature.toByteArray()))
+    private fun decode(signature: String, token: String): DecodedJWT =
+        JWT.require(Algorithm.HMAC512(signature.toByteArray()))
                 .build()
                 .verify(token.replace("Bearer ", ""))
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }

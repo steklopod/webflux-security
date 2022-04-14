@@ -1,8 +1,8 @@
 package de.steklopod.config
 
+import de.steklopod.config.security.JWTReactiveAuthorizationFilter
 import de.steklopod.config.security.JWTService
 import de.steklopod.service.UserService
-import de.steklopod.config.security.JWTReactiveAuthorizationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource

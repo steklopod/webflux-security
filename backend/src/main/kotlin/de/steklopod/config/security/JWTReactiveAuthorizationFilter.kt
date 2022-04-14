@@ -12,8 +12,6 @@ import reactor.core.publisher.Mono
 
 class JWTReactiveAuthorizationFilter(private val jwtService: JWTService) : WebFilter {
 
-    private val logger: Logger = LoggerFactory.getLogger(javaClass)
-
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
         val authHeader = exchange.request.headers.getFirst(HttpHeaders.AUTHORIZATION) ?: return chain.filter(exchange)
 
@@ -30,5 +28,9 @@ class JWTReactiveAuthorizationFilter(private val jwtService: JWTService) : WebFi
         }
 
         return chain.filter(exchange).contextWrite(ReactiveSecurityContextHolder.clearContext())
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }

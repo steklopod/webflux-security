@@ -1,7 +1,6 @@
 package de.steklopod.service
 
 import de.steklopod.model.Customer
-import de.steklopod.service.CustomerService
 import kotlinx.coroutines.reactor.mono
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService

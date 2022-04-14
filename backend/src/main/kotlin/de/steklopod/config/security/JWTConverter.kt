@@ -4,6 +4,7 @@ import de.steklopod.config.HttpExceptionFactory.badRequest
 import de.steklopod.model.LoginRequest
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
+import org.slf4j.LoggerFactory
 import org.springframework.core.ResolvableType
 import org.springframework.http.MediaType
 import org.springframework.http.codec.json.AbstractJackson2Decoder
@@ -18,12 +19,11 @@ import javax.validation.Validator
 @Component
 class JWTConverter(private val jacksonDecoder: AbstractJackson2Decoder,
                    private val validator: Validator) : ServerAuthenticationConverter {
+
     override fun convert(exchange: ServerWebExchange?): Mono<Authentication> = mono {
         val loginRequest = getUsernameAndPassword(exchange!!) ?: throw badRequest()
 
-        if (validator.validate(loginRequest).isNotEmpty()) {
-            throw badRequest()
-        }
+        if (validator.validate(loginRequest).isNotEmpty()) throw badRequest()
 
         return@mono UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
     }
@@ -36,5 +36,9 @@ class JWTConverter(private val jacksonDecoder: AbstractJackson2Decoder,
                 .onErrorResume { Mono.empty<LoginRequest>() }
                 .cast(LoginRequest::class.java)
                 .awaitFirstOrNull()
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }
