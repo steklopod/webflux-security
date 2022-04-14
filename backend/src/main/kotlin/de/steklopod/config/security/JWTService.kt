@@ -13,21 +13,15 @@ import java.util.*
 class JWTService(@Value("\${app.secret}") val secret: String,
                  @Value("\${app.refresh}") val refresh: String) {
 
-    fun accessToken(username: String, expirationInMillis: Int, roles: Array<String>): String {
-        return generate(username, expirationInMillis, roles, secret)
-    }
+    fun accessToken(username: String, expirationInMillis: Int, roles: Array<String>): String =
+        generate(username, expirationInMillis, roles, secret)
 
-    fun decodeAccessToken(accessToken: String): DecodedJWT {
-        return decode(secret, accessToken)
-    }
+    fun decodeAccessToken(accessToken: String): DecodedJWT = decode(secret, accessToken)
 
-    fun refreshToken(username: String, expirationInMillis: Int, roles: Array<String>): String {
-        return generate(username, expirationInMillis, roles, refresh)
-    }
+    fun refreshToken(username: String, expirationInMillis: Int, roles: Array<String>): String =
+        generate(username, expirationInMillis, roles, refresh)
 
-    fun decodeRefreshToken(refreshToken: String): DecodedJWT {
-        return decode(refresh, refreshToken)
-    }
+    fun decodeRefreshToken(refreshToken: String): DecodedJWT = decode(refresh, refreshToken)
 
     fun getRoles(decodedJWT: DecodedJWT) = decodedJWT.getClaim("role").asList(String::class.java)
             .map { SimpleGrantedAuthority(it) }

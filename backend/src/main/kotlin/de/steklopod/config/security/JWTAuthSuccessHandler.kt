@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
 @Component
-class JWTServerAuthenticationSuccessHandler(private val jwtService: JWTService) : ServerAuthenticationSuccessHandler {
+class JWTAuthSuccessHandler(private val jwtService: JWTService) : ServerAuthenticationSuccessHandler {
     companion object {
         private const val FIFTEEN_MIN = 1000 * 60 * 15
         private const val FOUR_HOURS = 1000 * 60 * 60 * 4

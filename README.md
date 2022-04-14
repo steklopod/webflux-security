@@ -1,39 +1,24 @@
-# Spring Webflux + Spring Security + Kotlin Coroutines
-## [![Minimal CI/CD](https://github.com/steklopod/webflux-security/actions/workflows/test.yml/badge.svg)](https://github.com/steklopod/webflux-security/actions/workflows/test.yml)
+# Spring Webflux, Security + 🚀 `Kotlin` Coroutines
+## [![Test Backend](https://github.com/steklopod/webflux-security/actions/workflows/test.yml/badge.svg)](https://github.com/steklopod/webflux-security/actions/workflows/test.yml)
 
-Hi! If you are one of those people like me, that are trying to learn Spring Webflux with Kotlin and want to add Spring Security 
-to a project, this repository is for you. As you probably already know, the documentation about using Spring Security with Spring Webflux 
-if very scarce and if we add Kotlin on top of that, is even more. This lack of documentation has encouraged me to do this repository, 
-I will try to explain how to make a custom security configuration based in JWT with Kotlin coroutines with a "close-to-real-world" minimal example.
-
-There are few resources over the internet explaining this topic, but most of them have incomplete or incorrect information. 
-I think that this is for two reasons: a poor documentation and young technology. So even trying to do it perfectly, I'm pretty sure 
-I made lot of mistakes, if you find them (in the code or in the README), please make a pull request. Together we could make a better documentation for everyone.
-
-I'm assuming that you have some knowledge with Spring Webflux (know what Mono and Flux is), so I will skip the explanation of Webflux, 
-but I'm going to shed new light on how we can work with Mono and Flux with Kotlin coroutines in an imperative way.
+Example of how to make a custom security configuration based in JWT with Kotlin coroutines.
 
 # Try it
 
-https://test.popokis.com
+http://localhost:8080
 
-Go to 'Customers' menu section and try to login with:
+Go to `Customers` menu section and try to login with:
 
 `user@example.com` : `userPassword`
 
 ## 1. Stack
 
-First things first, the stack we are gonna use is the following:
-
-* OpenJDK 15
-* Kotlin 1.4.X
-* Spring Boot (Webflux + Security + Reactive Data MongoDB)
-* Maven
+* Java `17`
+* Kotlin
+* Spring Boot (Webflux, Security,  Reactive Data MongoDB)
+* Gradle
 * MongoDB 4.2 through docker
 * Vue.js
-
-If you take a look at the parent [pom.xml](/pom.xml) of the project, you will see that we are compiling to java 11 
-but this project runs in a OpenJDK 15 JVM. This is because Kotlin does not support java 15 bytecode yet.
 
 ## 2. Project Structure
 
@@ -45,7 +30,7 @@ The project consists in two maven modules:
 And in two more folders:
 
 * `.github` (CI/CD)
-* `data` (MongoDB scripts to initialize the database)
+* `mongo` (MongoDB scripts to initialize the database. They )
 
 ## 3. Security
 

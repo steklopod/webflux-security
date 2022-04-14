@@ -1,6 +1,6 @@
 package de.steklopod.config
 
-import de.steklopod.config.security.JWTReactiveAuthorizationFilter
+import de.steklopod.config.security.JWTReactAuthFilter
 import de.steklopod.config.security.JWTService
 import de.steklopod.service.UserService
 import org.springframework.context.annotation.Bean
@@ -39,6 +39,14 @@ class WebConfig : WebFluxConfigurer {
     }
 
     @Bean
+    fun mainRouter() = router {
+        accept(MediaType.TEXT_HTML).nest {
+            GET("/") { temporaryRedirect(URI("/index.html")).build() }
+        }
+        resources("/**", ClassPathResource("public/"))
+    }
+
+    @Bean
     fun configureSecurity(
         http: ServerHttpSecurity, jwtAuthenticationFilter: AuthenticationWebFilter, jwtService: JWTService
     ): SecurityWebFilterChain {
@@ -51,17 +59,9 @@ class WebConfig : WebFluxConfigurer {
             .anyExchange().authenticated()
             .and()
             .addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-            .addFilterAt(JWTReactiveAuthorizationFilter(jwtService), SecurityWebFiltersOrder.AUTHORIZATION)
+            .addFilterAt(JWTReactAuthFilter(jwtService), SecurityWebFiltersOrder.AUTHORIZATION)
             .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
             .build()
-    }
-
-    @Bean
-    fun mainRouter() = router {
-        accept(MediaType.TEXT_HTML).nest {
-            GET("/") { temporaryRedirect(URI("/index.html")).build() }
-        }
-        resources("/**", ClassPathResource("public/"))
     }
 
     @Bean
@@ -89,10 +89,9 @@ class WebConfig : WebFluxConfigurer {
 
     @Bean
     fun reactiveAuthenticationManager(
-        reactiveUserDetailsService: UserService,
-        passwordEncoder: PasswordEncoder
+        userService: UserService, passwordEncoder: PasswordEncoder
     ): ReactiveAuthenticationManager =
-        UserDetailsRepositoryReactiveAuthenticationManager(reactiveUserDetailsService).apply {
+        UserDetailsRepositoryReactiveAuthenticationManager(userService).apply {
             setPasswordEncoder(passwordEncoder)
         }
 }
