@@ -52,7 +52,7 @@ class WebConfig : WebFluxConfigurer {
     ): SecurityWebFilterChain {
         return http
             .csrf().disable()
-            .logout().disable()
+//            .logout().disable()
             .authorizeExchange()
             .pathMatchers(*EXCLUDED_PATHS).permitAll()
             .pathMatchers("/admin/**").hasRole("ADMIN")
@@ -69,17 +69,16 @@ class WebConfig : WebFluxConfigurer {
 
     @Bean
     fun authenticationWebFilter(
-        reactiveAuthenticationManager: ReactiveAuthenticationManager,
+        manager: ReactiveAuthenticationManager,
         jwtConverter: ServerAuthenticationConverter,
-        serverAuthenticationSuccessHandler: ServerAuthenticationSuccessHandler,
-        jwtServerAuthenticationFailureHandler: ServerAuthenticationFailureHandler
-    ): AuthenticationWebFilter = AuthenticationWebFilter(reactiveAuthenticationManager).apply {
+        successHandler: ServerAuthenticationSuccessHandler, failureHandler: ServerAuthenticationFailureHandler
+    ): AuthenticationWebFilter = AuthenticationWebFilter(manager).apply {
         setRequiresAuthenticationMatcher {
             ServerWebExchangeMatchers.pathMatchers(POST, "/login").matches(it)
         }
         setServerAuthenticationConverter(jwtConverter)
-        setAuthenticationSuccessHandler(serverAuthenticationSuccessHandler)
-        setAuthenticationFailureHandler(jwtServerAuthenticationFailureHandler)
+        setAuthenticationSuccessHandler(successHandler)
+        setAuthenticationFailureHandler(failureHandler)
         setSecurityContextRepository(NoOpServerSecurityContextRepository.getInstance())
     }
 

@@ -1,1 +1,1 @@
-db.createUser({ user: "admin", pwd: "password", roles: [ { role: "readWrite", db: "proddb" } ] });
+db.createUser({ user: "admin", pwd: "password", roles: [ { role: "readWrite", db: "mongo-db" } ] });

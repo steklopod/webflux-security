@@ -18,7 +18,7 @@ jobs:
           mongodb-port: 27017
           mongodb-username: admin
           mongodb-password: password
-          mongodb-db: proddb
+          mongodb-db: mongo-db
 
 
       - name: 🪜 Setup java 17

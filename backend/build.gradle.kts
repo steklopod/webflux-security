@@ -8,9 +8,6 @@ plugins {
 }
 
 dependencies {
-//    val r2dbc: String by project
-//    implementation(enforcedPlatform("io.r2dbc:r2dbc-bom:$r2dbc"))
-
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin")
     implementation("org.springframework.boot", "spring-boot-starter-security")
     implementation("org.springframework.boot", "spring-boot-starter-validation")

@@ -10,8 +10,8 @@ spring:
   output.ansi.enabled: ALWAYS
   data:
     mongodb:
-#      uri: mongodb://admin:password@localhost:27017/proddb?authSource=admin
-      database: proddb
+#      uri: mongodb://admin:password@localhost:27017/mongo-db?authSource=admin
+      database: mongo-db
       host: localhost
       username: admin
       password: password

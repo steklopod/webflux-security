@@ -17,10 +17,6 @@ class TestUserInitializer(
     @Value("\${app.first_user.username}") val firstUsername: String,
     @Value("\${app.first_user.password}") val firstPassword: String
 ) {
-    companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
-    }
-
     @EventListener(ApplicationReadyEvent::class)
     fun init() {
         runBlocking {
@@ -39,5 +35,9 @@ class TestUserInitializer(
                 logger.info("First customer already created")
             }
         }
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }

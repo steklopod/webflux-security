@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.security.core.GrantedAuthority
 import java.time.Instant
+import java.time.LocalDateTime
 
 @Document
 data class Customer(
@@ -22,9 +23,9 @@ data class Customer(
     val role: Role = USER,
 
     @CreatedDate
-    val createdAt: Instant = Instant.now(),
+    val createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate
-    val updatedAt: Instant = Instant.now()
+    val updatedAt: LocalDateTime? = null
 ) : GrantedAuthority {
 
     override fun getAuthority(): String = "ROLE_$role"
