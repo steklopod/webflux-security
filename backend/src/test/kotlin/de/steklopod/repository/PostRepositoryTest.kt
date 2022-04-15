@@ -20,10 +20,10 @@ class PostRepositoryTest(@Autowired private val mongo: ReactiveFluentMongoOperat
 
             val inserted: Post = posts.save(Post(title = "mytitle", content = "mycontent"))
 
-            assertNotNull(inserted?.id)
+            assertNotNull(inserted.id)
             println("inserted id: $inserted.id")
 
-            val post = posts.findOne(inserted?.id!!)
+            val post = posts.findOne(inserted.id!!)
             assertEquals("mytitle", post.title)
             assertEquals("mycontent", post.content)
         }

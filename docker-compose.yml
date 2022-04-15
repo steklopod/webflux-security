@@ -14,5 +14,3 @@ services:
       test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
       start_period: 40s
 #      test: [ "CMD", "mongo", "--eval", "\"db.adminCommand('ping')\"" ]
-#    volumes:
-#      - ./mongo/init:/docker-entrypoint-initdb.d

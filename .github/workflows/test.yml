@@ -1,10 +1,9 @@
-name: Minimal CI/CD
+name: Test Backend
 
-on: [push]
+on: push
 
 jobs:
-  tests:
-    name: Testing
+  TEST_BACKEND:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -13,13 +12,10 @@ jobs:
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.7.0
         with:
-#          mongodb-version: '4.2'
-#          mongodb-replica-set: test-rs
-          mongodb-port: 27017
+#          mongodb-port: 27017
           mongodb-username: admin
           mongodb-password: password
           mongodb-db: mongo-db
-
 
       - name: 🪜 Setup java 17
         uses: actions/setup-java@v3
@@ -48,6 +44,5 @@ jobs:
       - name: 🎐 Test codecov
         uses: codecov/codecov-action@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-#          files: ./build/reports/jacoco/test/jacocoTestReport.xml # optional
+          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true

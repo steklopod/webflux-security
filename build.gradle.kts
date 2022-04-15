@@ -1,1 +1,1 @@
-description = "Webflux Security fullstack example"
+description = "Webflux Security example"
