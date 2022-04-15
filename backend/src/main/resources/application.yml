@@ -1,3 +1,4 @@
+server.port: 3000
 app:
   secret: secret
   refresh: refresh
@@ -16,3 +17,5 @@ spring:
       username: admin
       password: password
       authentication-database: admin
+
+springdoc.api-docs.path: /docs

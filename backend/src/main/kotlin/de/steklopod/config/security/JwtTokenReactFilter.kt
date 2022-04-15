@@ -21,7 +21,6 @@ class JwtTokenReactFilter(private val jwtService: JwtService) : WebFilter {
                 null,
                 jwtService.getRoles(token)
             )
-
             val context: Context = ReactiveSecurityContextHolder.withAuthentication(auth)
             return chain.filter(exchange).contextWrite(context)
         } catch (e: Exception) {

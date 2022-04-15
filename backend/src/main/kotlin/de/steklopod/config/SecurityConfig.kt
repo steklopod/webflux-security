@@ -1,7 +1,9 @@
 package de.steklopod.config
 
-import de.steklopod.config.security.JwtTokenReactFilter
 import de.steklopod.config.security.JwtService
+import de.steklopod.config.security.JwtTokenReactFilter
+import de.steklopod.model.Role
+import de.steklopod.model.Role.ADMIN
 import de.steklopod.service.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ClassPathResource
@@ -15,8 +17,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
@@ -37,7 +37,10 @@ import java.net.URI
 class SecurityConfig : WebFluxConfigurer {
 
     companion object {
-        val EXCLUDED_PATHS = arrayOf("/login", "/", "/static/**", "/index.html", "/favicon.ico")
+        val EXCLUDED_PATHS = arrayOf(
+            "/login", "/", "/static/**", "/index.html", "/favicon.ico",
+            "/docs/**", "/docs.yaml", "/webjars/**",
+        )
     }
 
     @Bean
@@ -51,15 +54,14 @@ class SecurityConfig : WebFluxConfigurer {
     //    https://docs.spring.io/spring-security/reference/5.6.0-RC1/reactive/configuration/webflux.html
     @Bean
     fun configureSecurity(
-        http: ServerHttpSecurity,
-        jwtAuthenticationFilter: AuthenticationWebFilter,
-        jwtService: JwtService
+        http: ServerHttpSecurity, jwtService: JwtService, jwtAuthenticationFilter: AuthenticationWebFilter
     ): SecurityWebFilterChain = http
         .csrf().disable()
-        //      .logout().disable()
+        .formLogin().disable()
+        .logout().disable()
         .authorizeExchange()
         .pathMatchers(*EXCLUDED_PATHS).permitAll()
-        .pathMatchers("/admin/**").hasRole("ADMIN")
+        .pathMatchers("/admin/**").hasRole(ADMIN.name)
         .anyExchange().authenticated()
         .and()
         .addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)

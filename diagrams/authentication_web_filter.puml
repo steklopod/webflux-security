@@ -1,8 +1,0 @@
-@startuml
-AuthenticationWebFilter *-left- ReactiveAuthenticationManagerResolver
-ServerAuthenticationSuccessHandler -right-* AuthenticationWebFilter
-AuthenticationWebFilter *-- ServerAuthenticationConverter
-ServerAuthenticationFailureHandler --* AuthenticationWebFilter
-AuthenticationWebFilter *-- ServerSecurityContextRepository
-ServerWebExchangeMatcher --* AuthenticationWebFilter
-@enduml

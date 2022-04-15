@@ -3,18 +3,9 @@
 
 Example of how to make a custom security configuration based in JWT with Kotlin coroutines.
 
-# Try it
-
-[http://localhost:3000](http://localhost:3000)
-
-Go to `Customers` menu section and try to login with:
-
-`user@example.com` : `userPassword`
-
 ## 1. Stack
 
-* Java `17`
-* Kotlin
+* Kotlin (Java `17`)
 * Spring Boot (Webflux, Security)
 * Gradle
 * Reactive `MongoDB` (through docker)
@@ -129,11 +120,7 @@ The filter chain for Spring Security Webflux has the following order:
     
     - Figure 1. Unless otherwise specified, filters with 'default' word are added by Spring Security -
 
-Looking at the diagram above (Figure 1), if we want to implement a JWT based security for our API (our use case in this repository), we 
-have to focus on two filters: [AuthenticationWebFilter](https://github.com/spring-projects/spring-security/blob/master/web/src/main/java/org/springframework/security/web/server/authentication/AuthenticationWebFilter.java) and [AuthorizationWebFilter](https://github.com/spring-projects/spring-security/blob/master/web/src/main/java/org/springframework/security/web/server/authorization/AuthorizationWebFilter.java), but let's start with the default configuration that Spring Security Webflux give to us. 
-Also, you could find the order of the filters here: [SecurityWebFiltersOrder](https://github.com/spring-projects/spring-security/blob/master/config/src/main/java/org/springframework/security/config/web/server/SecurityWebFiltersOrder.java).
-
-### 4 Authentication
+## 4. Authentication
 
 1. We want to authenticate users through a POST to `/login` endpoint, our matcher looks at the request and see if this pattern match. We can use the factory method `pathMatchers()` that [ServerWebExchangeMatchers](/backend/src/main/kotlin/com/popokis/backend_server/application/WebConfig.kt#L71) provides 
 to create our custom matcher. 
@@ -147,7 +134,7 @@ to create our custom matcher.
 5. On authentication error:
     1. Return unauthorized error. Done by [JWTServerAuthenticationFailureHandler](/backend/src/main/kotlin/com/popokis/backend_server/application/JWTServerAuthenticationFailureHandler.kt).
 
-### 5 Authorization
+## 5. Authorization
 
 
 If you look at the code, you can see that we are not using the Authentication object for nothing, this is because we are not creating any session in the 
@@ -174,7 +161,7 @@ npm i
 npm build
 ```
 
-2. Build & Test `backend`
+2. Build & Test `backend` (from root folder)
 
 ```shell
 ./gradlew build
@@ -185,3 +172,11 @@ npm build
 ```shell
 ./gradlew bootRun
 ```
+
+### Try it
+
+[http://localhost:3000](http://localhost:3000)
+
+Go to `Customers` menu section and try to login with:
+
+`user@example.com` : `userPassword`

@@ -22,6 +22,7 @@ dependencies {
     val openapi: String by project
     implementation("org.springdoc:springdoc-openapi-kotlin:$openapi")
     implementation("org.springdoc:springdoc-openapi-webflux-ui:$openapi")
+    implementation("org.springdoc:springdoc-openapi-security:$openapi")
 
     testImplementation("org.springframework.boot", "spring-boot-starter-test")
     testImplementation("org.springframework.security", "spring-security-test")
