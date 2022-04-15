@@ -1,7 +1,7 @@
 app:
   secret: secret
   refresh: refresh
-  cors: http://localhost:8080
+  cors: http://localhost:3000
   first_user:
     username: "user@example.com"
     password: "userPassword"

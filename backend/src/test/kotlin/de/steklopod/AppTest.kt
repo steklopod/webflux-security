@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class AppTest {
-    @Autowired lateinit var webTestClient: WebTestClient
+    @Autowired lateinit var client: WebTestClient
     @Autowired lateinit var jwtService: JWTService
 
     fun accessToken() = accessToken("user@example.com", "ROLE_$USER")

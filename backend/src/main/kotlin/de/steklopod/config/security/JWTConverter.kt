@@ -17,18 +17,12 @@ import reactor.core.publisher.Mono
 import javax.validation.Validator
 
 @Component
-class JWTConverter(
-    private val jacksonDecoder: AbstractJackson2Decoder,
-    private val validator: Validator
-) : ServerAuthenticationConverter {
+class JWTConverter(private val jacksonDecoder: AbstractJackson2Decoder) : ServerAuthenticationConverter {
 
     override fun convert(exchange: ServerWebExchange): Mono<Authentication> = mono {
-        val loginRequest = getUsernameAndPassword(exchange) ?: throw badRequest()
+        val loginRequest: LoginRequest = getUsernameAndPassword(exchange) ?: throw badRequest()
 
-        if (validator.validate(loginRequest).isNotEmpty()) throw badRequest()
-
-
-        return@mono UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
+        UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
     }
 
     private suspend fun getUsernameAndPassword(exchange: ServerWebExchange): LoginRequest? {

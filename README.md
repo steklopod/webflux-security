@@ -5,7 +5,7 @@ Example of how to make a custom security configuration based in JWT with Kotlin 
 
 # Try it
 
-http://localhost:8080
+http://localhost:3000
 
 Go to `Customers` menu section and try to login with:
 

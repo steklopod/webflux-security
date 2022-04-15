@@ -4,7 +4,6 @@ import de.steklopod.AppTest
 import de.steklopod.model.Customer
 import de.steklopod.service.CustomerService
 import de.steklopod.TestHelper
-import de.steklopod.model.Role
 import de.steklopod.model.Role.ADMIN
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
@@ -12,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.test.web.reactive.server.expectBodyList
 
-internal class AdminTest(@Autowired private val customerService: CustomerService) : AppTest() {
+internal class AdminControllerTest(@Autowired private val customerService: CustomerService) : AppTest() {
 
     private fun adminAccessToken() = accessToken("user@example.com", "ROLE_$ADMIN")
 
     @Test
     fun `Given a customer with USER role when tries to fetch data from admin customers API then receives an UNAUTHORIZED error`() {
-        webTestClient
+        client
                 .get().uri("/admin/customers")
                 .header(HttpHeaders.AUTHORIZATION, accessToken())
                 .exchange()
@@ -32,7 +31,7 @@ internal class AdminTest(@Autowired private val customerService: CustomerService
 
             customerService.save(customer)
 
-            webTestClient
+            client
                     .get().uri("/admin/customers")
                     .header(HttpHeaders.AUTHORIZATION, adminAccessToken())
                     .exchange()
