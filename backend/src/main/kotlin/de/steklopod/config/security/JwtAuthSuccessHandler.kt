@@ -18,7 +18,6 @@ class JwtAuthSuccessHandler(private val jwtService: JwtService) : ServerAuthenti
         private val log = LoggerFactory.getLogger(this::class.java)
     }
 
-
     override fun onAuthenticationSuccess(
         webFilterExchange: WebFilterExchange, authentication: Authentication
     ): Mono<Void> = mono {

@@ -26,7 +26,7 @@ internal class CustomerControllerTest(@Autowired private val customerService: Cu
                 .get().uri("/v1/customers")
                 .header(HttpHeaders.AUTHORIZATION, accessToken().replace("Bearer ", ""))
                 .exchange()
-                .expectStatus().isUnauthorized
+                .expectStatus().isOk
     }
 
     @Test

@@ -96,18 +96,4 @@ class SecurityConfig : WebFluxConfigurer {
         UserDetailsRepositoryReactiveAuthenticationManager(userService).apply {
             setPasswordEncoder(passwordEncoder())
         }
-
-    // TODO: for local test onlu
-    //  @Bean
-    fun inMemoryUserDetailsService(passwordEncoder: PasswordEncoder): MapReactiveUserDetailsService {
-        val admin: UserDetails = org.springframework.security.core.userdetails.User
-            .withUsername("admin")
-            .password("admin")
-            .roles("USER", "ADMIN")
-            .passwordEncoder(passwordEncoder::encode)
-            .build()
-        println("admin: $admin")
-        return MapReactiveUserDetailsService(admin)
-    }
-
 }
