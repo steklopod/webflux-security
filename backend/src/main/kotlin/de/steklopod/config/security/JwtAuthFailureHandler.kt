@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
 @Component
-class JWTAuthFailureHandler : ServerAuthenticationFailureHandler {
+class JwtAuthFailureHandler : ServerAuthenticationFailureHandler {
 
     override fun onAuthenticationFailure(
         webFilterExchange: WebFilterExchange, exception: AuthenticationException?

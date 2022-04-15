@@ -1,10 +1,9 @@
 package de.steklopod.config
 
-import de.steklopod.config.security.JWTReactAuthFilter
-import de.steklopod.config.security.JWTService
+import de.steklopod.config.security.JwtTokenReactFilter
+import de.steklopod.config.security.JwtService
 import de.steklopod.service.UserService
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpMethod.POST
 import org.springframework.http.MediaType
@@ -16,6 +15,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
@@ -30,11 +31,10 @@ import org.springframework.web.reactive.config.WebFluxConfigurer
 import org.springframework.web.reactive.function.server.router
 import java.net.URI
 
-@Configuration
 @EnableWebFlux
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-class WebConfig : WebFluxConfigurer {
+class SecurityConfig : WebFluxConfigurer {
 
     companion object {
         val EXCLUDED_PATHS = arrayOf("/login", "/", "/static/**", "/index.html", "/favicon.ico")
@@ -53,7 +53,7 @@ class WebConfig : WebFluxConfigurer {
     fun configureSecurity(
         http: ServerHttpSecurity,
         jwtAuthenticationFilter: AuthenticationWebFilter,
-        jwtService: JWTService
+        jwtService: JwtService
     ): SecurityWebFilterChain = http
         .csrf().disable()
         //      .logout().disable()
@@ -63,7 +63,7 @@ class WebConfig : WebFluxConfigurer {
         .anyExchange().authenticated()
         .and()
         .addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-        .addFilterAt(JWTReactAuthFilter(jwtService), SecurityWebFiltersOrder.AUTHORIZATION)
+        .addFilterAt(JwtTokenReactFilter(jwtService), SecurityWebFiltersOrder.AUTHORIZATION)
         .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
         .build()
 
@@ -97,14 +97,17 @@ class WebConfig : WebFluxConfigurer {
             setPasswordEncoder(passwordEncoder())
         }
 
-//    @Bean
-//    fun userDetailsService(passwordEncoder: PasswordEncoder): MapReactiveUserDetailsService {
-//        val admin: UserDetails = User.withUsername("admin")
-//            .password("password")
-//            .roles("USER", "ADMIN")
-//            .passwordEncoder(passwordEncoder::encode)
-//            .build()
-//        println("admin: $admin")
-//        return MapReactiveUserDetailsService(admin)
-//    }
+    // TODO: for local test onlu
+    //  @Bean
+    fun inMemoryUserDetailsService(passwordEncoder: PasswordEncoder): MapReactiveUserDetailsService {
+        val admin: UserDetails = org.springframework.security.core.userdetails.User
+            .withUsername("admin")
+            .password("admin")
+            .roles("USER", "ADMIN")
+            .passwordEncoder(passwordEncoder::encode)
+            .build()
+        println("admin: $admin")
+        return MapReactiveUserDetailsService(admin)
+    }
+
 }

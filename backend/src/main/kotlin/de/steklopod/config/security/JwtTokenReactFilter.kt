@@ -10,7 +10,7 @@ import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebFilterChain
 import reactor.core.publisher.Mono
 
-class JWTReactAuthFilter(private val jwtService: JWTService) : WebFilter {
+class JwtTokenReactFilter(private val jwtService: JwtService) : WebFilter {
 
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
         val authHeader = exchange.request.headers.getFirst(AUTHORIZATION)
@@ -22,8 +22,13 @@ class JWTReactAuthFilter(private val jwtService: JWTService) : WebFilter {
         try {
             val token: DecodedJWT = jwtService.decodeAccessToken(authHeader)
             log.info("🍄🍄🍄 DecodedJWT: $token")
-            val auth = UsernamePasswordAuthenticationToken(token.subject, null, jwtService.getRoles(token))
-            return chain.filter(exchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth))
+            val auth = UsernamePasswordAuthenticationToken(
+                token.subject,
+                null,
+                jwtService.getRoles(token)
+            )
+            return chain.filter(exchange)
+                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth))
         } catch (e: Exception) {
             log.error("JWT exception", e)
         }

@@ -14,10 +14,9 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
-import javax.validation.Validator
 
 @Component
-class JWTConverter(private val jacksonDecoder: AbstractJackson2Decoder) : ServerAuthenticationConverter {
+class JwtToAuthentConverter(private val jacksonDecoder: AbstractJackson2Decoder) : ServerAuthenticationConverter {
 
     override fun convert(exchange: ServerWebExchange): Mono<Authentication> = mono {
         val loginRequest: LoginRequest = getUsernameAndPassword(exchange) ?: throw badRequest()

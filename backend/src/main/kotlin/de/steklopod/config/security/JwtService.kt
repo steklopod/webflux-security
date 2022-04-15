@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class JWTService(
+class JwtService(
     @Value("\${app.secret}") val secret: String,
     @Value("\${app.refresh}") val refresh: String
 ) {

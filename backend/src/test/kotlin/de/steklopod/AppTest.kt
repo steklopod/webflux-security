@@ -1,6 +1,6 @@
 package de.steklopod
 
-import de.steklopod.config.security.JWTService
+import de.steklopod.config.security.JwtService
 import de.steklopod.model.Post
 import de.steklopod.model.Role.USER
 import kotlinx.coroutines.reactive.asFlow
@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class AppTest {
     @Autowired lateinit var client: WebTestClient
-    @Autowired lateinit var jwtService: JWTService
+    @Autowired lateinit var jwtService: JwtService
 
     fun accessToken() = accessToken("user@example.com", "ROLE_$USER")
 
