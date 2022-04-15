@@ -10,8 +10,8 @@ import java.time.LocalDateTime
 data class Post(
     @Id
     val id: String? = null,
-    val title: String? = null,
-    val content: String? = null,
+    val title: String,
+    val content: String,
 
     @CreatedDate
     val createdAt: LocalDateTime? = null,
