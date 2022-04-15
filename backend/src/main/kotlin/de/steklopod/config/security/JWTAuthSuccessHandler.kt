@@ -1,6 +1,6 @@
 package de.steklopod.config.security
 
-import de.steklopod.config.HttpExceptionFactory.unauthorized
+import de.steklopod.config.exception.HttpExceptionFactory.unauthorized
 import kotlinx.coroutines.reactor.mono
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
@@ -15,13 +15,12 @@ class JWTAuthSuccessHandler(private val jwtService: JWTService) : ServerAuthenti
     companion object {
         private const val FIFTEEN_MIN = 1000 * 60 * 15
         private const val FOUR_HOURS = 1000 * 60 * 60 * 4
-        private val logger = LoggerFactory.getLogger(this::class.java)
+        private val log = LoggerFactory.getLogger(this::class.java)
     }
 
 
     override fun onAuthenticationSuccess(
-        webFilterExchange: WebFilterExchange,
-        authentication: Authentication
+        webFilterExchange: WebFilterExchange, authentication: Authentication
     ): Mono<Void> = mono {
         val principal = authentication.principal ?: throw unauthorized()
 
@@ -34,13 +33,15 @@ class JWTAuthSuccessHandler(private val jwtService: JWTService) : ServerAuthenti
 
                 val exchange = webFilterExchange.exchange ?: throw unauthorized()
 
+                log.info("User with roles: $roles")
+
                 with(exchange.response.headers) {
                     setBearerAuth(accessToken)
                     set("Refresh-Token", refreshToken)
                 }
 
             }
-            else -> throw RuntimeException("Not User!")
+            else -> throw RuntimeException("Not User!") // TODO: separate exception
         }
         return@mono null
     }

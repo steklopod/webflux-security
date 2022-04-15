@@ -29,15 +29,15 @@ class PostRepository(private val mongo: ReactiveFluentMongoOperations) {
     fun findAll(): Flow<Post> = mongo.query<Post>().flow()
 
     suspend fun findOne(id: String): Post = mongo.query<Post>()
-        .matching(Query.query(Criteria.where("id").isEqualTo(id))).awaitOne()?: throw PostNotFoundException(id)
+        .matching(Query.query(Criteria.where("id").isEqualTo(id))).awaitOne() ?: throw PostNotFoundException(id)
 
     suspend fun deleteAll(): Long = mongo.remove<Post>().allAndAwait().deletedCount
 
     suspend fun save(post: Post): Post = mongo.insert<Post>().oneAndAwait(post)
 
     suspend fun update(post: Post) = mongo.update<Post>()
-    //  .matching(query(where("id").isEqualTo(id)))
-    //  .apply(Update.update("title",post.title!!).set("content", post.content!!))
+        //  .matching(query(where("id").isEqualTo(id)))
+        //  .apply(Update.update("title",post.title!!).set("content", post.content!!))
         .replaceWith(post)
         .asType<Post>().findReplaceAndAwait()
 

@@ -1,6 +1,6 @@
 package de.steklopod.config.security
 
-import de.steklopod.config.HttpExceptionFactory
+import de.steklopod.config.exception.HttpExceptionFactory
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
 import org.slf4j.LoggerFactory
@@ -19,7 +19,7 @@ class JWTAuthFailureHandler : ServerAuthenticationFailureHandler {
     ): Mono<Void> = mono {
         val exchange = webFilterExchange.exchange ?: throw HttpExceptionFactory.unauthorized()
 
-        logger.error("Oops: ${UNAUTHORIZED.reasonPhrase}")
+        log.error("🍁 Oops: ${UNAUTHORIZED.reasonPhrase}: ${exception?.message}")
 
         with(exchange.response) {
             statusCode = UNAUTHORIZED
@@ -28,6 +28,6 @@ class JWTAuthFailureHandler : ServerAuthenticationFailureHandler {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
+        private val log = LoggerFactory.getLogger(this::class.java)
     }
 }

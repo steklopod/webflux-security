@@ -9,9 +9,9 @@ class CorsConfig : WebFluxConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry
-                .addMapping("/**")
-                .allowedMethods("*")
-                .allowedOrigins("*") // todo check if these 2 commented lines are needed
-                .allowedHeaders("*")
+            .addMapping("/**")
+            .allowedMethods("*")
+            .allowedOrigins("*") // todo check if these 2 commented lines are needed
+            .allowedHeaders("*")
     }
 }

@@ -1,6 +1,6 @@
 package de.steklopod.config.security
 
-import de.steklopod.config.HttpExceptionFactory.badRequest
+import de.steklopod.config.exception.HttpExceptionFactory.badRequest
 import de.steklopod.model.LoginRequest
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
@@ -17,13 +17,16 @@ import reactor.core.publisher.Mono
 import javax.validation.Validator
 
 @Component
-class JWTConverter(private val jacksonDecoder: AbstractJackson2Decoder,
-                   private val validator: Validator) : ServerAuthenticationConverter {
+class JWTConverter(
+    private val jacksonDecoder: AbstractJackson2Decoder,
+    private val validator: Validator
+) : ServerAuthenticationConverter {
 
-    override fun convert(exchange: ServerWebExchange?): Mono<Authentication> = mono {
-        val loginRequest = getUsernameAndPassword(exchange!!) ?: throw badRequest()
+    override fun convert(exchange: ServerWebExchange): Mono<Authentication> = mono {
+        val loginRequest = getUsernameAndPassword(exchange) ?: throw badRequest()
 
         if (validator.validate(loginRequest).isNotEmpty()) throw badRequest()
+
 
         return@mono UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
     }
@@ -32,13 +35,13 @@ class JWTConverter(private val jacksonDecoder: AbstractJackson2Decoder,
         val dataBuffer = exchange.request.body
         val type = ResolvableType.forClass(LoginRequest::class.java)
         return jacksonDecoder
-                .decodeToMono(dataBuffer, type, MediaType.APPLICATION_JSON, mapOf())
-                .onErrorResume { Mono.empty<LoginRequest>() }
-                .cast(LoginRequest::class.java)
-                .awaitFirstOrNull()
+            .decodeToMono(dataBuffer, type, MediaType.APPLICATION_JSON, mapOf())
+            .onErrorResume { Mono.empty<LoginRequest>() }
+            .cast(LoginRequest::class.java)
+            .awaitFirstOrNull()
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
+        private val log = LoggerFactory.getLogger(this::class.java)
     }
 }

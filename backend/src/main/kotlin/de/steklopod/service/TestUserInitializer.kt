@@ -30,14 +30,14 @@ class TestUserInitializer(
                 )
                 customerService.save(customer)
 
-                logger.info("First customer created: $firstUsername")
+                log.info("First customer created: $firstUsername")
             } else {
-                logger.info("First customer already created")
+                log.info("First customer already created")
             }
         }
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
+        private val log = LoggerFactory.getLogger(this::class.java)
     }
 }

@@ -5,6 +5,8 @@ import de.steklopod.model.LoginRequest
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpHeaders.AUTHORIZATION
 
 internal class LoginTest : AppTest() {
 
@@ -16,16 +18,16 @@ internal class LoginTest : AppTest() {
 
     @Test
     fun `Given an existing customer when tries to login then get an access and refresh token`() {
-        val responseHeaders = webTestClient
+        val responseHeaders: HttpHeaders = webTestClient
                 .post().uri("/login")
                 .bodyValue(LoginRequest(firstUsername, firstPassword))
                 .exchange()
                 .expectStatus().isOk
-                .expectHeader().exists("Authorization")
+                .expectHeader().exists(AUTHORIZATION)
                 .expectHeader().exists("Refresh-Token")
                 .expectBody().returnResult().responseHeaders
 
-        val accessToken = responseHeaders["Authorization"]?.get(0)
+        val accessToken = responseHeaders[AUTHORIZATION]?.get(0)
         val refreshToken = responseHeaders["Refresh-Token"]?.get(0)
 
         val decodedAccessToken = jwtService.decodeAccessToken(accessToken!!)

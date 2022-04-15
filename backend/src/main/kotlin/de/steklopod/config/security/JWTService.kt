@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class JWTService(@Value("\${app.secret}") val secret: String,
-                 @Value("\${app.refresh}") val refresh: String) {
+class JWTService(
+    @Value("\${app.secret}") val secret: String,
+    @Value("\${app.refresh}") val refresh: String
+) {
 
     fun accessToken(username: String, expirationInMillis: Int, roles: Array<String>): String =
         generate(username, expirationInMillis, roles, secret)
@@ -24,21 +26,21 @@ class JWTService(@Value("\${app.secret}") val secret: String,
     fun decodeRefreshToken(refreshToken: String): DecodedJWT = decode(refresh, refreshToken)
 
     fun getRoles(decodedJWT: DecodedJWT) = decodedJWT.getClaim("role").asList(String::class.java)
-            .map { SimpleGrantedAuthority(it) }
+        .map { SimpleGrantedAuthority(it) }
 
     private fun generate(username: String, expirationInMillis: Int, roles: Array<String>, signature: String): String =
         JWT.create()
-                .withSubject(username)
-                .withExpiresAt(Date(System.currentTimeMillis() + expirationInMillis))
-                .withArrayClaim("role", roles)
-                .sign(Algorithm.HMAC512(signature.toByteArray()))
+            .withSubject(username)
+            .withExpiresAt(Date(System.currentTimeMillis() + expirationInMillis))
+            .withArrayClaim("role", roles)
+            .sign(Algorithm.HMAC512(signature.toByteArray()))
 
     private fun decode(signature: String, token: String): DecodedJWT =
         JWT.require(Algorithm.HMAC512(signature.toByteArray()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
+            .build()
+            .verify(token.replace("Bearer ", ""))
 
     companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
+        private val log = LoggerFactory.getLogger(this::class.java)
     }
 }

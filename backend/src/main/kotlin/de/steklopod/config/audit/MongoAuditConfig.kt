@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono
 
 @Configuration
 @EnableReactiveMongoAuditing
-class MongoConfig {
+class MongoAuditConfig {
     @Bean
     fun reactiveAuditorAware() = ReactiveAuditorAware {
         ReactiveSecurityContextHolder.getContext()
