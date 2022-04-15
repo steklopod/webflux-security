@@ -1,4 +1,5 @@
 plugins {
+    jacoco
     val kotlinVersion = "1.6.20"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -41,6 +42,7 @@ tasks {
         into("/src/main/resources/public")
     }
     test { useJUnitPlatform() }
+    jacocoTestReport { reports { xml.required.set(true) } }
 }
 
 defaultTasks("copyFront", "build")

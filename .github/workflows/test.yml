@@ -42,3 +42,12 @@ jobs:
 
       - name: 🕋 TEST
         run: ./gradlew test
+
+      - name: 📹 Jacoco test report
+        run: ./gradlew jacocoTestReport
+      - name: 🎐 Test codecov
+        uses: codecov/codecov-action@v2
+        with:
+#          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          files: ./build/reports/jacoco/test/jacocoTestReport.xml # optional
+          verbose: true
