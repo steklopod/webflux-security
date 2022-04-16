@@ -1,5 +1,5 @@
 # Spring Webflux Security with 🚀 `Kotlin` Coroutines
-## [![codecov](https://codecov.io/gh/steklopod/webflux-security/branch/master/graph/badge.svg?token=jwtjBDB3jH)](https://codecov.io/gh/steklopod/webflux-security) [![Test Backend](https://github.com/steklopod/webflux-security/actions/workflows/master.yml/badge.svg?branch=master)](https://github.com/steklopod/webflux-security/actions/workflows/master.yml)
+## [![codecov](https://codecov.io/gh/steklopod/webflux-security/branch/master/graph/badge.svg?token=jwtjBDB3jH)](https://codecov.io/gh/steklopod/webflux-security) [![Integration](https://github.com/steklopod/webflux-security/actions/workflows/master.yml/badge.svg)](https://github.com/steklopod/webflux-security/actions/workflows/master.yml)
 
 Example of how to make a custom security configuration based in JWT with Kotlin coroutines.
 
@@ -7,21 +7,18 @@ Example of how to make a custom security configuration based in JWT with Kotlin 
 
 * Kotlin (Java `17`)
 * Spring Boot (Webflux, Security)
-* Gradle
-* Reactive `MongoDB` (through docker)
-* Vue.js (very simple example)
+* Reactive `MongoDB` (docker-compose)
+* Vue.js (primitive login page example)
 
 ## 2. Project Structure
 
 The project consists in two maven modules:
 
-* `backend` (Spring app)
+* `backend`  (Spring app)
 * `frontend` (Vue.js app)
 
-And in two more folders:
-
-* `.github` (CI/CD)
-* `mongo` (MongoDB scripts to initialize the database. They )
+And one more optional module:
+* `mongo` (Just for initialization example )
 
 ## 3. Security
 
@@ -30,7 +27,7 @@ forming a chain. Every [ServerWebExchange](https://github.com/spring-projects/sp
 it's commonly known as an object that holds request and response, this concept exists in other places like undertow web server) has 
 to go through this chain. Spring Security Webflux allow us to configure the chain ([SecurityWebFilterChain](https://github.com/spring-projects/spring-security/blob/master/web/src/main/java/org/springframework/security/web/server/SecurityWebFilterChain.java)) as we need and even 
 give us the possibility to have more than one per path. 
-The filter chain for Spring Security Webflux has the following order:
+> The filter chain for Spring Security Webflux has the following order:
 
      +---------------------------+
      |                           |
@@ -136,7 +133,6 @@ to create our custom matcher.
 
 ## 5. Authorization
 
-
 If you look at the code, you can see that we are not using the Authentication object for nothing, this is because we are not creating any session in the 
 server, looking at the [AuthorizationWebFilter](https://github.com/spring-projects/spring-security/blob/master/web/src/main/java/org/springframework/security/web/server/authorization/AuthorizationWebFilter.java#L46) 
 we can see that is using the security context to get the Authentication from there but we disabled sessions so there is no Authentication object, we have to authorize from 
@@ -144,16 +140,9 @@ the request that is inside the AuthorizationContext.
 
 To authorize admins, we check if the role that comes from the token in the request has the same role of the required, `ROLE_ADMIN` in this case.
 
-To authorize the rest, we are checking the validity of the JWT that comes in every request. The validity for us is:
-
-1. If the token is expired. 
-2. If token was given by us (is signed with our signature).
-
-These checks are provided by our JWT library. 
-
 # 🌞 Build project
 
-1. Build `frontend`
+1. Build `frontend`:
 
 ```shell
 cd frontend
@@ -161,10 +150,9 @@ npm i
 npm build
 ```
 
-2. Build & Test `backend` (from root folder)
+2. Copy frontend distribution to backend `backend`. Run from root folder:
 
 ```shell
-./gradlew build
 ./gradlew copyFront
 ```
 
@@ -179,4 +167,4 @@ npm build
 
 Go to `Customers` menu section and try to login with:
 
-`user@example.com` : `userPassword`
+#### `user@example.com` : `userPassword`
