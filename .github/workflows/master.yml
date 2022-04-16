@@ -1,4 +1,4 @@
-name: Test Backend
+name: Integration
 
 on: push
 

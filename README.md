@@ -1,5 +1,5 @@
 # Spring Webflux Security with 🚀 `Kotlin` Coroutines
-## [![codecov](https://codecov.io/gh/steklopod/webflux-security/branch/main/graph/badge.svg?token=jwtjBDB3jH)](https://codecov.io/gh/steklopod/webflux-security) [![Test Backend](https://github.com/steklopod/webflux-security/actions/workflows/test.yml/badge.svg)](https://github.com/steklopod/webflux-security/actions/workflows/test.yml)
+## [![codecov](https://codecov.io/gh/steklopod/webflux-security/branch/master/graph/badge.svg?token=jwtjBDB3jH)](https://codecov.io/gh/steklopod/webflux-security) [![Test Backend](https://github.com/steklopod/webflux-security/actions/workflows/master.yml/badge.svg?branch=master)](https://github.com/steklopod/webflux-security/actions/workflows/master.yml)
 
 Example of how to make a custom security configuration based in JWT with Kotlin coroutines.
 
