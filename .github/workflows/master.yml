@@ -35,7 +35,7 @@ jobs:
         run:  chmod +x ./gradlew
 
       - name: 🕋 TEST
-        run: ./gradlew test -Dspring.profiles.active=mongo -Pspring.profiles.active=mongo
+        run: ./gradlew test --args='--spring.profiles.active=mongo'
 
       - name: 📹 Jacoco test report
         run: ./gradlew jacocoTestReport
