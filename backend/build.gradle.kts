@@ -28,7 +28,7 @@ dependencies {
     testImplementation("org.springframework.security", "spring-security-test")
     testImplementation("io.projectreactor", "reactor-test")
 
-    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.5")
+//    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.5")
 
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
     annotationProcessor("org.springframework.boot", "spring-boot-configuration-processor")
