@@ -5,8 +5,6 @@ on: push
 jobs:
   TEST_BACKEND:
     runs-on: ubuntu-latest
-    env:
-      SPRING_PROFILES_ACTIVE: mongo
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -37,7 +35,7 @@ jobs:
         run:  chmod +x ./gradlew
 
       - name: 🕋 TEST
-        run: ./gradlew test
+        run: ./gradlew bootRun --args='--spring.profiles.active=mongo'
 
       - name: 📹 Jacoco test report
         run: ./gradlew jacocoTestReport
