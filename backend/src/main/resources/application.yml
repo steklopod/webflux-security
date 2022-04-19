@@ -9,13 +9,19 @@ app:
 
 spring:
   output.ansi.enabled: ALWAYS
+  mongodb.embedded.version: 4.0.2
   data:
     mongodb:
 #      uri: mongodb://admin:password@localhost:27017/mongo-db?authSource=admin
       database: mongo-db
-      host: localhost
       username: admin
       password: password
       authentication-database: admin
-
 springdoc.api-docs.path: /docs
+
+---
+spring:
+  config.activate.on-profile: production
+  data:
+    mongodb:
+      host: mongo

@@ -8,11 +8,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.7.0
         with:
-#          mongodb-port: 27017
           mongodb-username: admin
           mongodb-password: password
           mongodb-db: mongo-db
@@ -37,7 +35,7 @@ jobs:
         run:  chmod +x ./gradlew
 
       - name: 🕋 TEST
-        run: ./gradlew test
+        run: ./gradlew test # -Pprofile=mongo
 
       - name: 📹 Jacoco test report
         run: ./gradlew jacocoTestReport

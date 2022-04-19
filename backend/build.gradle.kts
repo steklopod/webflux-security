@@ -27,6 +27,7 @@ dependencies {
     testImplementation("org.springframework.boot", "spring-boot-starter-test")
     testImplementation("org.springframework.security", "spring-security-test")
     testImplementation("io.projectreactor", "reactor-test")
+//    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.5")
 
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
     annotationProcessor("org.springframework.boot", "spring-boot-configuration-processor")
@@ -40,7 +41,10 @@ tasks {
         from("../frontend/dist")
         into("/src/main/resources/public")
     }
-    test { useJUnitPlatform() }
+    test {
+        useJUnitPlatform()
+        project.properties["profile"]?.run { systemProperty("spring.profiles.active", this) }
+    }
     jacocoTestReport { reports { xml.required.set(true) } }
 }
 
