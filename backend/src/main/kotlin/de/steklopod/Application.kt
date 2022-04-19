@@ -13,13 +13,15 @@ import org.springframework.boot.runApplication
 import org.springframework.context.event.EventListener
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
 import org.springframework.stereotype.Component
+import org.springframework.web.reactive.config.EnableWebFlux
 
+@EnableWebFlux
 @EnableReactiveMongoRepositories
-@SpringBootApplication
 @OpenAPIDefinition(servers = [Server(url = "http://localhost:3000")],
     info = Info(contact = Contact(name = "Dmitry Kaltovich", email = "steklopod@gmail.com", url = "https://github.com/steklopod"),
                 description = "Webflux application", title = "Reactive kotlin")
 )
+@SpringBootApplication
 class Application
 fun main(args: Array<String>) { runApplication<Application>(*args) }
 

@@ -1,14 +1,9 @@
-package de.steklopod.config
+package de.steklopod.config.security
 
-import de.steklopod.config.security.JwtService
-import de.steklopod.config.security.JwtTokenReactFilter
-import de.steklopod.model.Role
 import de.steklopod.model.Role.ADMIN
 import de.steklopod.service.UserService
 import org.springframework.context.annotation.Bean
-import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpMethod.POST
-import org.springframework.http.MediaType
 import org.springframework.http.codec.json.AbstractJackson2Decoder
 import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.security.authentication.ReactiveAuthenticationManager
@@ -26,29 +21,16 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers
-import org.springframework.web.reactive.config.EnableWebFlux
-import org.springframework.web.reactive.config.WebFluxConfigurer
-import org.springframework.web.reactive.function.server.router
-import java.net.URI
 
-@EnableWebFlux
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-class SecurityConfig : WebFluxConfigurer {
+class SecurityConfig {
 
     companion object {
         val EXCLUDED_PATHS = arrayOf(
             "/login", "/", "/static/**", "/index.html", "/favicon.ico",
             "/docs/**", "/docs.yaml", "/webjars/**",
         )
-    }
-
-    @Bean
-    fun mainRouter() = router {
-        accept(MediaType.TEXT_HTML).nest {
-            GET("/") { temporaryRedirect(URI("/index.html")).build() }
-        }
-        resources("/**", ClassPathResource("public/"))
     }
 
     //    https://docs.spring.io/spring-security/reference/5.6.0-RC1/reactive/configuration/webflux.html
@@ -88,10 +70,10 @@ class SecurityConfig : WebFluxConfigurer {
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
+    fun jacksonDecoder(): AbstractJackson2Decoder = Jackson2JsonDecoder()
 
     @Bean
-    fun jacksonDecoder(): AbstractJackson2Decoder = Jackson2JsonDecoder()
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
     fun reactiveAuthenticationManager(userService: UserService): ReactiveAuthenticationManager =
