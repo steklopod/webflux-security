@@ -1,9 +1,9 @@
 plugins {
     jacoco
-    val kotlinVersion = "1.6.20"
+    val kotlinVersion = "1.7.0-RC"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
-    id("org.springframework.boot") version "2.6.6"
+    id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 
@@ -17,7 +17,7 @@ dependencies {
     implementation("io.projectreactor.kotlin", "reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-reactor")
 
-    implementation("com.auth0:java-jwt:3.19.1")
+    implementation("com.auth0:java-jwt:3.19.2")
 
     val openapi: String by project
     implementation("org.springdoc:springdoc-openapi-kotlin:$openapi")
